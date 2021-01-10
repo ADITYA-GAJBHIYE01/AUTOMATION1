@@ -1,0 +1,48 @@
+1.1 Data Scraping (Sequence)								
+	Private = False							
+	Variables							
+		ExtractDataTable(DataTable)						
+	Activities							
+		1.17 Open Browser (OpenBrowser)						
+			Url = https://www.amazon.in/s?k=laptop+under+50%2C000&crid=14YMZP0D4O3PB&sprefix=laptop+under+%2Caps%2C307&ref=nb_sb_ss_ts-a-p_4_13					
+			Private = False					
+			Body					
+				1.18 Do (Sequence)				
+					Private = False			
+		1.3 Attach Browser 'Amazoninl Page' (BrowserScope)						
+			Selector = <html title='Amazon.in : laptop under 50,000' />					
+			BrowserType = IE					
+			Private = False					
+			Body					
+				1.4 Do (Sequence)				
+					Private = False			
+					Activities			
+						1.5 Extract Structured Data 'DIV  search' (ExtractData)		
+							ExtractMetadata = <extract><column name2='URL ' attr2='href' exact='0' attr='text' name='PRICE '><webctrl idx='1' tag='div' /><webctrl idx='2' tag='div' /><webctrl idx='1' tag='div' /><webctrl idx='3' tag='span' /><webctrl idx='2' tag='div' /><webctrl tag='div' /><webctrl idx='1' tag='div' /><webctrl idx='1' tag='span' /><webctrl idx='1' tag='div' /><webctrl idx='1' tag='div' /><webctrl tag='div' /><webctrl tag='div' /><webctrl tag='div' /><webctrl idx='2' tag='div' /><webctrl idx='1' tag='div' /><webctrl idx='1' tag='div' /><webctrl idx='1' tag='div' /><webctrl idx='1' tag='div' /><webctrl idx='1' tag='div' /><webctrl tag='span' /></column></extract>	
+							MaxNumberOfResults = 100	
+							DataTable = ExtractDataTable	
+							NextLinkSelector = <webctrl idx='2' isleaf='1' parentid='search' tag='LI' />	
+							SimulateClick = True	
+							Target	
+								Selector = <webctrl id='search' tag='DIV' />
+								WaitForReady = COMPLETE
+							ContinueOnError = True	
+							Private = False	
+		1.3 Excel Application Scope (ExcelApplicationScope)						
+			Workbook path = C:\Users\ADITYA\Desktop\New Microsoft Excel Worksheet.xlsx					
+			Visible = False					
+			Create if not exists = True					
+			Save changes = True					
+			Read-only = False					
+			MacroSetting = EnableAll					
+			InstanceCachePeriod = 3000					
+			Private = False					
+			Body					
+				1.4 Do (Sequence)				
+					Private = False			
+					Activities			
+						1.5 Write Range (ExcelWriteRange)		
+							DataTable = ExtractDataTable	
+							AddHeaders = True	
+							SheetName = Sheet1	
+							Private = False	
